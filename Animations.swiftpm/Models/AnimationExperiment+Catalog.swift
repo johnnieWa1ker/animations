@@ -14,6 +14,17 @@ extension AnimationExperiment {
             tags: ["spring", "scale", "controls"]
         ),
         AnimationExperiment(
+            id: "swiftui-shape-morph",
+            section: .swiftUI,
+            kind: .shapeMorph,
+            title: "Shape Morph",
+            subtitle: "Custom shape with animated size and control points.",
+            symbolName: "rectangle.on.rectangle.angled",
+            tint: .purple,
+            status: .ready,
+            tags: ["shape", "points", "morph"]
+        ),
+        AnimationExperiment(
             id: "swiftui-matched-geometry",
             section: .swiftUI,
             kind: .matchedGeometry,

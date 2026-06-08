@@ -11,6 +11,8 @@ struct ExperimentDetailView: View {
                 switch experiment.kind {
                 case .springPulse:
                     SpringPulseExperimentView()
+                case .shapeMorph:
+                    ShapeMorphExperimentView()
                 case .matchedGeometry:
                     PlaceholderExperimentView(
                         title: "Transition workbench",
