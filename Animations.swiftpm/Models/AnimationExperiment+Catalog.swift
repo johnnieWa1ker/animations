@@ -36,6 +36,17 @@ extension AnimationExperiment {
             tags: ["transition", "layout", "hero"]
         ),
         AnimationExperiment(
+            id: "geometry-promotion-banner",
+            section: .geometry,
+            kind: .promotionBannerGeometry,
+            title: "Promotion Banner Geometry",
+            subtitle: "Practice drawing a single shape with arcs, Bezier handles and a moving pointer.",
+            symbolName: "point.topleft.down.curvedto.point.bottomright.up",
+            tint: .orange,
+            status: .draft,
+            tags: ["shape", "path", "arc", "bezier", "tooltip", "pointer"]
+        ),
+        AnimationExperiment(
             id: "metal-shader-preview",
             section: .metal,
             kind: .shaderPreview,

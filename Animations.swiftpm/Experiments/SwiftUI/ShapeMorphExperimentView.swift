@@ -62,7 +62,8 @@ struct ShapeMorphExperimentView: View {
 
 private struct ShapeMorphPreviewView: View {
     private let baseSize = CGSize(width: 373.43, height: 323.86)
-    private let shapeColor = Color(red: 0.522, green: 0.149, blue: 1).opacity(0.2)
+    private let backFigureColor = Color(red: 0.522, green: 0.149, blue: 1).opacity(0.3)
+    private let frontFigureColor = Color(red: 0.522, green: 0.149, blue: 1).opacity(0.15)
 
     let isAnimating: Bool
     let widthScale: Double
@@ -94,23 +95,62 @@ private struct ShapeMorphPreviewView: View {
                 ZStack {
                     PreviewGridView()
 
-                    MorphingPurpleShape(phase: phase, pointTravel: pointTravel)
-                        .fill(shapeColor)
+                    ZStack {
+                        MorphingPurpleShape(
+                            phase: phase,
+                            pointTravel: pointTravel,
+                            anchors: MorphingShapeGeometry.backFigure
+                        )
+                        .fill(backFigureColor)
                         .overlay {
-                            MorphingPurpleShape(phase: phase, pointTravel: pointTravel)
-                                .stroke(.purple.opacity(0.42), lineWidth: 1.5)
+                            MorphingPurpleShape(
+                                phase: phase,
+                                pointTravel: pointTravel,
+                                anchors: MorphingShapeGeometry.backFigure
+                            )
+                            .stroke(.purple.opacity(0.42), lineWidth: 1.5)
                         }
                         .frame(width: displaySize.width, height: displaySize.height)
                         .animation(.spring(response: 0.5, dampingFraction: 0.76), value: widthScale)
                         .animation(.spring(response: 0.5, dampingFraction: 0.76), value: heightScale)
-                        .blur(radius: 30)
+                        .blur(radius: 40)
 
-                    if showsPoints {
-                        MorphingShapePointsView(
+                        if showsPoints {
+                            MorphingShapePointsView(
+                                phase: phase,
+                                pointTravel: pointTravel,
+                                size: displaySize,
+                                anchors: MorphingShapeGeometry.backFigure
+                            )
+                        }
+
+                        MorphingPurpleShape(
                             phase: phase,
                             pointTravel: pointTravel,
-                            size: displaySize
+                            anchors: MorphingShapeGeometry.frontFigure
                         )
+                        .fill(frontFigureColor)
+                        .overlay {
+                            MorphingPurpleShape(
+                                phase: phase,
+                                pointTravel: pointTravel,
+                                anchors: MorphingShapeGeometry.frontFigure
+                            )
+                            .stroke(.purple.opacity(0.42), lineWidth: 1.5)
+                        }
+                        .frame(width: displaySize.width, height: displaySize.height)
+                        .animation(.spring(response: 0.5, dampingFraction: 0.76), value: widthScale)
+                        .animation(.spring(response: 0.5, dampingFraction: 0.76), value: heightScale)
+                        .blur(radius: 20)
+
+                        if showsPoints {
+                            MorphingShapePointsView(
+                                phase: phase,
+                                pointTravel: pointTravel,
+                                size: displaySize,
+                                anchors: MorphingShapeGeometry.frontFigure
+                            )
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -129,6 +169,7 @@ private struct ShapeMorphPreviewView: View {
 private struct MorphingPurpleShape: Shape {
     var phase: Double
     var pointTravel: Double
+    var anchors: [MorphingAnchor]
 
     var animatableData: AnimatablePair<Double, Double> {
         get { AnimatablePair(phase, pointTravel) }
@@ -139,11 +180,7 @@ private struct MorphingPurpleShape: Shape {
     }
 
     func path(in rect: CGRect) -> Path {
-        let points = MorphingShapeGeometry.points(
-            in: rect,
-            phase: phase,
-            pointTravel: pointTravel
-        )
+        let points = points(in: rect)
 
         var path = Path()
         path.move(to: points[0])
@@ -154,12 +191,27 @@ private struct MorphingPurpleShape: Shape {
         path.closeSubpath()
         return path
     }
+
+    private func points(in rect: CGRect) -> [CGPoint] {
+        anchors.enumerated().map { index, anchor in
+            let wave = phase + Double(index) * 1.08
+            let amplitude = min(rect.width, rect.height) * pointTravel
+            let xOffset = phase == 0 ? 0 : cos(wave * 1.13) * amplitude * anchor.xWeight
+            let yOffset = phase == 0 ? 0 : sin(wave * 0.91) * amplitude * anchor.yWeight
+
+            return CGPoint(
+                x: rect.minX + rect.width * anchor.x + xOffset,
+                y: rect.minY + rect.height * anchor.y + yOffset
+            )
+        }
+    }
 }
 
 private struct MorphingShapePointsView: View {
     let phase: Double
     let pointTravel: Double
     let size: CGSize
+    var anchors: [MorphingAnchor]
 
     var body: some View {
         ZStack {
@@ -180,21 +232,8 @@ private struct MorphingShapePointsView: View {
     }
 
     private var points: [CGPoint] {
-        MorphingShapeGeometry.points(
-            in: CGRect(origin: .zero, size: size),
-            phase: phase,
-            pointTravel: pointTravel
-        )
-    }
-}
-
-private enum MorphingShapeGeometry {
-    static func points(
-        in rect: CGRect,
-        phase: Double,
-        pointTravel: Double
-    ) -> [CGPoint] {
-        anchors.enumerated().map { index, anchor in
+        let rect: CGRect = CGRect(origin: .zero, size: size)
+        return anchors.enumerated().map { index, anchor in
             let wave = phase + Double(index) * 1.08
             let amplitude = min(rect.width, rect.height) * pointTravel
             let xOffset = phase == 0 ? 0 : cos(wave * 1.13) * amplitude * anchor.xWeight
@@ -206,13 +245,23 @@ private enum MorphingShapeGeometry {
             )
         }
     }
+}
 
-    private static let anchors: [MorphingAnchor] = [
+private enum MorphingShapeGeometry {
+    static let backFigure: [MorphingAnchor] = [
         MorphingAnchor(x: 0.00, y: 0.64, xWeight: 0.20, yWeight: 0.24),
-        MorphingAnchor(x: 0.50, y: 0.38, xWeight: 0.24, yWeight: 0.16),
+        MorphingAnchor(x: 0.50, y: 0.38, xWeight: 0.44, yWeight: 0.36),
         MorphingAnchor(x: 0.82, y: 0.00, xWeight: 0.14, yWeight: 0.24),
         MorphingAnchor(x: 1.00, y: 1.00, xWeight: 0.16, yWeight: 0.18),
         MorphingAnchor(x: 0.56, y: 0.74, xWeight: 0.24, yWeight: 0.18)
+    ]
+    
+    static let frontFigure: [MorphingAnchor] = [
+        MorphingAnchor(x: 0.30, y: 0.59, xWeight: 0.20, yWeight: 0.24),
+        MorphingAnchor(x: 0.55, y: 0.45, xWeight: 0.44, yWeight: 0.36),
+        MorphingAnchor(x: 0.70, y: 0.25, xWeight: 0.14, yWeight: 0.24),
+        MorphingAnchor(x: 0.80, y: 0.80, xWeight: 0.16, yWeight: 0.18),
+        MorphingAnchor(x: 0.56, y: 0.64, xWeight: 0.24, yWeight: 0.18)
     ]
 }
 

@@ -20,6 +20,8 @@ struct ExperimentDetailView: View {
                         tint: experiment.tint,
                         message: "This screen is ready for matched geometry controls and state previews."
                     )
+                case .promotionBannerGeometry:
+                    PromotionBannerGeometryExperimentView()
                 case .shaderPreview:
                     ShaderPreviewPlaceholderView()
                 case .particleField:
