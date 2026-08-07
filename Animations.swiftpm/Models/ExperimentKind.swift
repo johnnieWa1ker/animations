@@ -3,6 +3,7 @@ enum ExperimentKind: String, Hashable {
     case shapeMorph
     case matchedGeometry
     case promotionBannerGeometry
+    case programmableShapeGeometry
     case shaderPreview
     case particleField
 }

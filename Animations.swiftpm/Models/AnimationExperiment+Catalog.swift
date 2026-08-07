@@ -47,6 +47,17 @@ extension AnimationExperiment {
             tags: ["shape", "path", "arc", "bezier", "tooltip", "pointer"]
         ),
         AnimationExperiment(
+            id: "geometry-programmable-shape",
+            section: .geometry,
+            kind: .programmableShapeGeometry,
+            title: "Programmable Shape Host",
+            subtitle: "A bare Swift Shape host for writing path(in:) directly in Xcode.",
+            symbolName: "curlybraces.square",
+            tint: .pink,
+            status: .ready,
+            tags: ["shape", "path", "code", "xcode", "bezier"]
+        ),
+        AnimationExperiment(
             id: "metal-shader-preview",
             section: .metal,
             kind: .shaderPreview,
