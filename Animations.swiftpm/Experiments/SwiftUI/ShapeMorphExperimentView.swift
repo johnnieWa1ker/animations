@@ -113,7 +113,7 @@ private struct ShapeMorphPreviewView: View {
                         .frame(width: displaySize.width, height: displaySize.height)
                         .animation(.spring(response: 0.5, dampingFraction: 0.76), value: widthScale)
                         .animation(.spring(response: 0.5, dampingFraction: 0.76), value: heightScale)
-                        .blur(radius: 40)
+//                        .blur(radius: 40)
 
                         if showsPoints {
                             MorphingShapePointsView(
@@ -141,7 +141,7 @@ private struct ShapeMorphPreviewView: View {
                         .frame(width: displaySize.width, height: displaySize.height)
                         .animation(.spring(response: 0.5, dampingFraction: 0.76), value: widthScale)
                         .animation(.spring(response: 0.5, dampingFraction: 0.76), value: heightScale)
-                        .blur(radius: 20)
+//                        .blur(radius: 20)
 
                         if showsPoints {
                             MorphingShapePointsView(

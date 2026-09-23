@@ -4,6 +4,6 @@ enum ExperimentKind: String, Hashable {
     case matchedGeometry
     case promotionBannerGeometry
     case programmableShapeGeometry
-    case shaderPreview
+    case helloMetal
     case particleField
 }

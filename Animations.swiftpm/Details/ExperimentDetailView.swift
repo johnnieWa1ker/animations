@@ -24,8 +24,8 @@ struct ExperimentDetailView: View {
                     PromotionBannerGeometryExperimentView()
                 case .programmableShapeGeometry:
                     ProgrammableShapeGeometryExperimentView()
-                case .shaderPreview:
-                    ShaderPreviewPlaceholderView()
+                case .helloMetal:
+                    MetalBasicExperimentView()
                 case .particleField:
                     PlaceholderExperimentView(
                         title: "Particle field",

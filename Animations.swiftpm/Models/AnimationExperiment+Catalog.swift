@@ -60,9 +60,9 @@ extension AnimationExperiment {
         AnimationExperiment(
             id: "metal-shader-preview",
             section: .metal,
-            kind: .shaderPreview,
-            title: "Shader Preview",
-            subtitle: "A future home for Metal shader parameters and preview surfaces.",
+            kind: .helloMetal,
+            title: "Hello Metal",
+            subtitle: "First lesson about Metal: drawing primitives",
             symbolName: "waveform.path.ecg.rectangle",
             tint: .indigo,
             status: .draft,
