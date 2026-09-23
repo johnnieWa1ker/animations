@@ -69,6 +69,17 @@ extension AnimationExperiment {
             tags: ["metal", "shader", "preview"]
         ),
         AnimationExperiment(
+            id: "metal-ice",
+            section: .metal,
+            kind: .ice,
+            title: "Ice",
+            subtitle: "Interactive frost: freeze the glass and melt it with a touch.",
+            symbolName: "snowflake",
+            tint: .cyan,
+            status: .ready,
+            tags: ["metal", "shader", "ice", "frost", "voronoi"]
+        ),
+        AnimationExperiment(
             id: "metal-particle-field",
             section: .metal,
             kind: .particleField,
